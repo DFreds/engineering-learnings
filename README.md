@@ -8,3 +8,4 @@ Get started with it by installing Flutter as described [here](https://flutter.io
 
 ## VIM links
 https://vim.rtorr.com/
+https://vim-adventures.com/
