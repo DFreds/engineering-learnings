@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: demo-api
+  cloud:
+    kubernetes:
+      config:
+        enabled: true
+        name: demo-api
+      discovery:
+        filter: "metadata.labels['app']"
+
+server:
+  port: 8890
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+
+info:
+  app:
+    name: Demo API
+    description: Demo API
+    version: 1.0.0-SNAPSHOT
+

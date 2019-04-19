@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: friday-awesome-learning
+  name: friday-awesome-learning
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: friday-awesome-learning
+  template:
+    metadata:
+      labels:
+        app: friday-awesome-learning
+    spec:
+      containers:
+      - image: api:latest
+        name: api
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 8890
+        env:
+        - name: "SPRING_APPLICATION_NAME"
+          value: demo-api
+        - name: "KUBERNETES_NAMESPACE"
+          valueFrom:
+            fieldRef:
+              fieldPath: "metadata.namespace"

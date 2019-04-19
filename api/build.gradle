@@ -1,0 +1,69 @@
+plugins {
+  id 'org.springframework.boot' version '2.1.4.RELEASE'
+  id 'java'
+  id 'com.diffplug.gradle.spotless' version '3.21.0'
+  id 'com.palantir.docker' version '0.22.0'
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+ext {
+  lombokVersion = '1.18.6'
+}
+
+group = 'com.demo'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+  mavenCentral()
+}
+
+docker {
+  dependsOn build
+  name "${project.name}"
+  dockerfile file('Dockerfile')
+  println "archive file: ${jar.getArchiveFile().get().getAsFile().getPath()}"
+  files jar.getArchiveFile().get().getAsFile().getPath()
+  buildArgs(['ARCHIVE_FILE': jar.getArchiveFileName().get()])
+  pull true
+  noCache true
+}
+
+dependencies {
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+  implementation 'org.springframework.boot:spring-boot-starter-actuator'
+  implementation("joda-time:joda-time:2.10.1")
+
+  // region Spring Cloud K8S
+  implementation "org.springframework.cloud:spring-cloud-starter-kubernetes-config:1.0.1.RELEASE"
+  // endregion
+
+  compileOnly("org.projectlombok:lombok:${lombokVersion}")
+  annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+
+  runtimeOnly 'org.springframework.boot:spring-boot-devtools'
+
+  testImplementation 'org.springframework.boot:spring-boot-starter-test'
+  testImplementation 'org.assertj:assertj-core:3.12.2'
+  testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+  testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+}
+
+spotless {
+  java {
+    googleJavaFormat()
+    trimTrailingWhitespace()
+    indentWithSpaces(2)
+    endWithNewline()
+  }
+  format 'gradle', {
+    target '**/*.gradle'
+    trimTrailingWhitespace()
+    indentWithSpaces(2)
+    endWithNewline()
+  }
+  freshmark {
+  }
+}
