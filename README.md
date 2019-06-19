@@ -10,3 +10,9 @@ Get started with it by installing Flutter as described [here](https://flutter.io
 https://vim.rtorr.com/
 
 https://vim-adventures.com/
+
+## Angular 7
+
+https://github.com/412andrewmortimer/githubinator
+
+https://stackblitz.com/edit/githubinator
